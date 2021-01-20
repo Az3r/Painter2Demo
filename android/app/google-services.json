@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491455689481",
+    "project_id": "face-detection-b4c93",
+    "storage_bucket": "face-detection-b4c93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491455689481:android:0cb4fb9a4d5e56dacb19d8",
+        "android_client_info": {
+          "package_name": "com.example.DrawingLayer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491455689481-d6s4gdjnl7rj2ralt2q5nfrk1im4oe4l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmbTtIHr12TWQ-YqcUhGVSF55Dffz7_VA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491455689481-d6s4gdjnl7rj2ralt2q5nfrk1im4oe4l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

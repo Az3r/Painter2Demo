@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:painter2/painter2.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart' as path;
+import 'package:path/path.dart' as pathUtils;
 import 'package:intl/intl.dart' show DateFormat;
 
 class DrawingPage extends StatefulWidget {
@@ -14,6 +17,7 @@ class DrawingPage extends StatefulWidget {
 class _DrawingPageState extends State<DrawingPage> {
   ImagePicker _imagePicker;
   PainterController _painter;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -28,6 +32,7 @@ class _DrawingPageState extends State<DrawingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('🖌 Drawing ️🖌️🖌️'),
         actions: [
@@ -90,9 +95,10 @@ class _DrawingPageState extends State<DrawingPage> {
 
   void _changeBackgroundImage() async {
     final pickedFile = await _imagePicker.getImage(source: ImageSource.gallery);
-    if (pickedFile == null) return;
-    final data = await pickedFile.readAsBytes();
-    setState(() => _painter.backgroundImage = Image.memory(data));
+    if (pickedFile != null) {
+      final data = await pickedFile.readAsBytes();
+      setState(() => _painter.backgroundImage = Image.memory(data));
+    }
   }
 
   void _pickBrushColor() {
@@ -144,11 +150,25 @@ class _DrawingPageState extends State<DrawingPage> {
       context: context,
       builder: (context) => ImageNameTextField(),
     );
+
     if (name == null || name.isEmpty) return;
+
+    final dir = await path.getApplicationDocumentsDirectory();
     final data = await _painter.exportAsPNGBytes();
-    final result = await ImageGallerySaver.saveImage(data, name: name);
-    print(result);
-    print(await Permission.photos.status);
+    final file = File(pathUtils.join(dir.path, '$name.png'));
+
+    try {
+      await file.writeAsBytes(data);
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Successfully saved ${file.path}'),
+      ));
+    } catch (e) {
+      print(e);
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        backgroundColor: Colors.red[900],
+        content: Text('Failed to save ${file.path}'),
+      ));
+    }
   }
 
   @override
@@ -251,6 +271,7 @@ class _ThicknessSliderState extends State<ThicknessSlider> {
                 final value =
                     double.tryParse(text)?.clamp(1.0, 100) ?? _thickness;
                 _controller.text = value.toStringAsFixed(0);
+                widget.onChanged?.call(value);
                 setState(() => _thickness = value);
               },
               decoration: InputDecoration(

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:painter2/painter2.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:path/path.dart' as pathUtils;
